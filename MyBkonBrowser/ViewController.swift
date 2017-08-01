@@ -21,7 +21,8 @@ class ViewController: UIViewController, PHYEddystoneManagerDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         bkonManager = PHYEddystoneManager(apiKey: appID)
         bkonManager.delegate = self
-        bkonManager.setDelayedReport(false)
+        //set our app to sort area beacons. This is true by default but for the demo we'll leave it in.
+        bkonManager.setDelayedReport(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,6 +34,22 @@ class ViewController: UIViewController, PHYEddystoneManagerDelegate {
         bkonManager.setBarColor(navBarColor, titleColor: awesomeBkonBlue)
         bkonManager.setCellBarColor(myBeaconBorderColor)
         bkonManager.startScanningForBeacons(inModalView: self)
+        printFavTouchPoints()
+    }
+    
+    func printFavTouchPoints() {
+        let favList = bkonManager.getFavoriteBeacons()
+        if favList?.isEmpty == true{
+            print("There are no favorite beacons :/")
+        }
+        else{
+            //dump(favList)
+            for item in favList!{
+                if let myBeacon = item as? PHYEddystoneBeacon{
+                    print("Fav Title: " + myBeacon.title + "\nFav Desc: " + myBeacon.desc)
+                }
+            }
+        }
     }
 
 }
